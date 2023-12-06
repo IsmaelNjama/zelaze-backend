@@ -7,6 +7,7 @@ const services = {
         delete user.password;
     },
 
+// not ok!!
     addUser: async ({ firstname, lasname, pseudo, phone, email, address, description, password, admin }) => {
         try {
             const resp = await query(`
@@ -27,7 +28,7 @@ const services = {
         }
     },
     
-
+//ok 
     getAllUsers: async () => {
         const data = await query(`
             SELECT * 
@@ -37,6 +38,8 @@ const services = {
         return data.rows;
     },
 
+
+//ok
     getUserById: async (userId) => {
         const user = await query(`
             SELECT * FROM users
@@ -83,6 +86,7 @@ const services = {
         return data.rows;
     },
 
+    //ok 
     updateUser: async (userId, body) => {
         await query(`
             UPDATE users 
@@ -94,6 +98,8 @@ const services = {
         ]);
     },
 
+
+//ok
     deleteUser: async (userId) => {
         await query(`
             DELETE FROM users 

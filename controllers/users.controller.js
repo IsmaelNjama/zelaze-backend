@@ -40,6 +40,7 @@ module.exports = {
             next(ERR);
         }
     },
+    
     getUsers: async (req, res, next) => {
         try {
             console.log(req.user);
@@ -50,6 +51,7 @@ module.exports = {
             next(ERR);
         }
     },
+
     getMe: (req, res, next) => {
         try {
             const user = req.user;
@@ -79,7 +81,7 @@ module.exports = {
             // if (req.user.id !== userId && !req.user.permission.editor) {
             //     return next(ERR_NOT_ALLOWED);
             // }
-            await usersService.updateNormalizedUser(userId, req.body);
+            await usersService.updateUser(userId, req.body);
             res.send('updated');
         } catch (error) {
             console.log(error);
