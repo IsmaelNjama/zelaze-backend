@@ -7,18 +7,19 @@ const services = {
         delete user.password;
     },
 
-// not ok!!
-    addUser: async ({ firstname, lasname, pseudo, phone, email, address, description, password, admin }) => {
+// ok
+
+    addUser: async ({ firstname, lastname, pseudo, phone, email, address, description, password, admin }) => {
         try {
             const resp = await query(`
                 INSERT INTO users
-                (firstname, lasname, pseudo, phone, email, address, description, password, admin)
+                (firstname, lastname, pseudo, phone, email, address, description, password, admin)
                 VALUES
                 ($1, $2, $3, $4, $5, $6, $7, $8, $9)
                 RETURNING id;
             `,
             [
-                firstname, lasname, pseudo, phone, email, address, description, password, admin
+                firstname, lastname, pseudo, phone, email, address, description, password, admin
             ]);
     
             return resp.rows[0].id;

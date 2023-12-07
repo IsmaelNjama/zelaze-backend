@@ -22,6 +22,7 @@ module.exports = {
 
     addUser: async (req, res, next) => {
         try {
+            console.log(req.body)
             const { password, email } = req.body;
 
             const existed = await usersService.getUserByEmail(email);

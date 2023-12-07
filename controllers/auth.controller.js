@@ -42,7 +42,7 @@ module.exports = {
             const { email, password } = req.body;
 
             const user = await usersServices.getUserByEmail(email);
-            
+            console.log('user find in the db', user);
             if (!user) {
                 return next(ERR_LOGIN_NOT_FOUND);
             }
