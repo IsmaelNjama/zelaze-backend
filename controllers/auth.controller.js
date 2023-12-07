@@ -1,7 +1,7 @@
 const usersServices = require ('../services/users.services');
 const { validatePassword, hashPassword } = require('../utils/bycrypt.js');
 const { ERR, ERR_LOGIN_NOT_AUTH, ERR_LOGIN_NOT_FOUND, ERR_REGISTER_ALREADY_EXIST } = require('../utils/errors');
-// const jwtoken = require('../utils/jwtoken');
+const jwtoken = require('../utils/jwt.js');
 
 module.exports = {
     registerUser: async (req, res, next) => {
@@ -16,7 +16,8 @@ module.exports = {
 
             const hash = await hashPassword(password);
             const body = {...req.body, password : hash};
-            const newId = await usersServices.addUser(req.body, hash);
+            console.log("body", body);
+            const newId = await usersServices.addUser(body);
             console.log('newId : ', newId);
 
             res.send({ id: newId });
@@ -39,21 +40,21 @@ module.exports = {
                 return next(ERR_LOGIN_NOT_FOUND);
             }
 
-            // const isValid = await validatePassword(password, user.password);
-
-            // if (!isValid) {
-            //     return next(ERR_LOGIN_NOT_AUTH);
-            // }
+            const isValid = await validatePassword(password, user.password);
+            console.log("isValid", isValid);
+            if (!isValid) {
+                return next(ERR_LOGIN_NOT_AUTH);
+            }
 
             await usersServices.clearUser(user);
 
-        //     const payload = {
-        //         userId: user._id
-        //     };
-              
-        //    const accessToken = jwtoken.sign(payload);
-        //    console.log(accessToken);
-
+            const payload = {
+                userId: user.id
+            };
+              console.log("payload", payload)
+           const accessToken = jwtoken.sign(payload);
+           console.log("accessToken", accessToken);
+           console.log("user", user)
             res.send(user);
         } catch (error) {
             next(ERR);
