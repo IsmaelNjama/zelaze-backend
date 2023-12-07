@@ -41,7 +41,7 @@ module.exports = {
             }
 
             const isValid = await validatePassword(password, user.password);
-            console.log("isValid", isValid);
+
             if (!isValid) {
                 return next(ERR_LOGIN_NOT_AUTH);
             }
@@ -51,11 +51,10 @@ module.exports = {
             const payload = {
                 userId: user.id
             };
-              console.log("payload", payload)
+   
            const accessToken = jwtoken.sign(payload);
-           console.log("accessToken", accessToken);
-           console.log("user", user)
-            res.send(user);
+       
+            res.send(accessToken.accessToken);
         } catch (error) {
             next(ERR);
         }
