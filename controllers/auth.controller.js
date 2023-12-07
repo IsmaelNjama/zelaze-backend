@@ -1,39 +1,31 @@
 const usersServices = require ('../services/users.services');
-// const { validatePassword, hashPassword } = require('../utils/bycrypt');
-// const { ERR, ERR_LOGIN_NOT_AUTH, ERR_LOGIN_NOT_FOUND, ERR_REGISTER_ALREADY_EXIST } = require('../utils/errors');
+const { validatePassword, hashPassword } = require('../utils/bycrypt.js');
+const { ERR, ERR_LOGIN_NOT_AUTH, ERR_LOGIN_NOT_FOUND, ERR_REGISTER_ALREADY_EXIST } = require('../utils/errors');
 // const jwtoken = require('../utils/jwtoken');
 
 module.exports = {
     registerUser: async (req, res, next) => {
         try {
-            const newId = await usersServices.addUser(req.body);
-            res.send(newId)
-        } catch (error) {
-    console.log(error)        
-        }
-    },
+            const { password, email } = req.body;
 
-    //     try {
-    //         const { password, email } = req.body;
-
-    //         const user = await usersServices.getUserByEmail(email);
+            const user = await usersServices.getUserByEmail(email);
            
+            if (user) {
+                return next(ERR_REGISTER_ALREADY_EXIST);
+            }
 
-    //         if (user) {
-    //             return next(ERR_REGISTER_ALREADY_EXIST);
-    //         }
+            const hash = await hashPassword(password);
+            const body = {...req.body, password : hash};
+            const newId = await usersServices.addUser(req.body, hash);
+            console.log('newId : ', newId);
 
-    //         const hash = await hashPassword(password);
-    //         console.log('hash: ', hash);
-    //         const newId = await usersServices.addUser(req.body, hash);
-    //         console.log('newId : ', newId);
+            res.send({ id: newId });
 
-    //         res.send({ id: newId });
-
-    //     } catch (error) {
-    //         next(ERR);
-    //     }
-    // }, 
+        } catch (error) {
+            console.log('here is your error', error)
+            next(ERR);
+        }
+    }, 
 
     loginUser: async (req, res, next) => {
     

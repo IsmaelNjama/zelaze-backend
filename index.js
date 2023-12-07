@@ -17,23 +17,24 @@ app.use(cors({
 app.use('/users', require ('./routes/users.routes.js'));
 app.use('/auth', require('./routes/auth.routes.js'));
 
-// app.use((err, req, res, next) => {
-//   console.log(err);
 
-//   try {
-//       const [statusCode, msg] = err;
+app.use((err, req, res, next) => {
+  console.log(err);
 
-//       res.status(statusCode).send({
-//           error: true,
-//           message: msg
-//       })
-//   } catch (error) {
-//       res.status(500).send({
-//           error: true,
-//           message: err.message
-//       })
-//   }
-// })
+  try {
+      const [statusCode, msg] = err;
+
+      res.status(statusCode).send({
+          error: true,
+          message: msg
+      })
+  } catch (error) {
+      res.status(500).send({
+          error: true,
+          message: err.message
+      })
+  }
+})
 
 
 app.listen(2555, function () {
