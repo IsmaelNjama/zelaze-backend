@@ -57,22 +57,8 @@ const services = {
         return user.rows[0];
     },
 
-    getUsersByQuery: async (q = "", sort = "_id", direction = "1", limit = "10", skip = "0") => {
-        const query = new RegExp(q, 'i');
-
-        const data = await users().find({
-            $or: [
-                { "email": query },
-                { "name": query }
-            ]
-        }).sort({ [sort]: +direction }).limit(+limit).skip(+skip).toArray() //2
-
-        return data;
-    },
-
-
+    
     getUsersByQuery: async (q = "", sort = "_id", direction = "asc", limit = "10", skip = "0") => {
-        
 
         const data = await query(`
         SELECT *
