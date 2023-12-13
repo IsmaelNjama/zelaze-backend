@@ -10,40 +10,28 @@ const services = {
   addUser: async ({
     firstname,
     lastname,
-    pseudo,
     phone,
     email,
     address,
-    description,
+    bio,
     password,
-    role,
+    admin,
   }) => {
     try {
       const resp = await query(
         `
                 INSERT INTO users
-                (firstname, lastname, pseudo, phone, email, address, description, password, role)
+                (firstname, lastname, bio, phone, email, address, password, admin)
                 VALUES
-                ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                ($1, $2, $3, $4, $5, $6, $7, $8)
                 RETURNING id;
             `,
-        [
-          firstname,
-          lastname,
-          pseudo,
-          phone,
-          email,
-          address,
-          description,
-          password,
-          role,
-        ]
+        [firstname, lastname, bio, phone, email, address, password, admin]
       );
 
       return resp.rows[0].id;
     } catch (error) {
-      console.log(error);
-      return {};
+      console.error(error);
     }
   },
 
