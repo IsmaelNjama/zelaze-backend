@@ -1,40 +1,39 @@
-const { Client } = require ('pg'); 
+const { Client } = require("pg");
 
 const { DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD } = process.env;
 
-const client =new Client ({
-        host: DB_HOST,
-        port: DB_PORT,
-        database: DB_NAME,
-        user: DB_USER,
-        password: DB_PASSWORD,
-        ssl: {
-                    rejectUnauthorized: false
-       }
-    })
-    
+const client = new Client({
+  host: DB_HOST,
+  port: DB_PORT,
+  database: DB_NAME,
+  user: DB_USER,
+  password: DB_PASSWORD,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
 
-        const run = async () =>  {
-            try {
-                await client.connect()
-                console.log('postgres yeay!')
-            } catch (error) {
-                console.log(error)
-            }
-        }
+const run = async () => {
+  try {
+    await client.connect();
+    console.log("postgres yeay!");
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-        module.exports= {
-            run, 
-            query: async (text, args) => {
-                        try {
-                            const resp = await client.query(text, args)
-                
-                            return resp;
-                        } catch (error) {
-                            console.log(error)
-                            return {}
-                        }
-        }}
+module.exports = {
+  run,
+  query: async (text, args) => {
+    try {
+      const resp = await client.query(text, args);
+
+      return resp;
+    } catch (error) {
+      console.error(error);
+    }
+  },
+};
 
 // const { Pool } = require('pg');
 
@@ -53,8 +52,6 @@ const client =new Client ({
 //     idleTimeoutMillis: 0,
 //     connectionTimeoutMillis: 2000
 // })
-
-
 
 // const run = async () => {
 //     try {

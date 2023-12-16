@@ -5,7 +5,6 @@ const { ERR, REGISTER_ALREADY_EXIST } = require("../utils/errors");
 
 module.exports = {
   search: async (req, res, next) => {
-    console.log(req.query);
     try {
       const { q, sort, direction, limit, skip } = req.query;
 
@@ -19,14 +18,12 @@ module.exports = {
 
       res.send(users);
     } catch (error) {
-      console.log(error);
       next(ERR);
     }
   },
 
   addUser: async (req, res, next) => {
     try {
-      console.log(req.body);
       const { password, email } = req.body;
 
       const existed = await usersService.getUserByEmail(email);
@@ -47,8 +44,6 @@ module.exports = {
 
   getUsers: async (req, res, next) => {
     try {
-      console.log(req.user);
-
       const data = await usersService.getAllUsers();
       res.send(data);
     } catch (error) {
@@ -86,7 +81,6 @@ module.exports = {
       await usersService.updateUser(userId, req.body);
       res.send("updated");
     } catch (error) {
-      console.log(error);
       next(ERR);
     }
   },

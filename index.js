@@ -29,8 +29,6 @@ app.use("/auth", require("./routes/auth.routes.js"));
 app.use("/entries", require("./routes/entries.routes.js"));
 
 app.use((err, req, res, next) => {
-  console.log(err);
-
   try {
     const [statusCode, msg] = err;
 

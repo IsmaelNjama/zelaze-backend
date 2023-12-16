@@ -32,8 +32,6 @@ const services = {
         ]
       );
 
-      console.log(resp.rows[0].id);
-
       return resp.rows[0].id;
     } catch (error) {
       console.error(error);
@@ -70,8 +68,11 @@ const services = {
     const data = await query(`
         SELECT *
         FROM entries
-        WHERE title ILIKE '%${q}%' or category ILIKE '%${q}%' or availability ILIKE '%${q}%' or description ILIKE '%${q}%' 
-       or  country ILIKE '%${q}%' or town ILIKE '%${q}%'  
+        WHERE title ILIKE '%${q}%' 
+        or category ILIKE '%${q}%' 
+        or availability ILIKE '%${q}%' or description ILIKE '%${q}%' 
+        or country ILIKE '%${q}%' 
+        or town ILIKE '%${q}%'  
         ORDER BY ${sort} ${direction}
         LIMIT ${limit}
         OFFSET ${skip};

@@ -12,10 +12,6 @@ module.exports = {
   registerUser: async (req, res, next) => {
     try {
       const { password, email } = req.body;
-      console.log(
-        "🚀 ~ file: auth.controller.js:15 ~ registerUser: ~ req.body:",
-        req.body
-      );
 
       const user = await usersServices.getUserByEmail(email);
 
@@ -25,13 +21,11 @@ module.exports = {
 
       const hash = await hashPassword(password);
       const body = { ...req.body, password: hash };
-      console.log("body", body);
+
       const newId = await usersServices.addUser(body);
-      console.log("newId : ", newId);
 
       res.send({ id: newId });
     } catch (error) {
-      console.log("here is your error", error);
       next(ERR);
     }
   },
@@ -39,13 +33,8 @@ module.exports = {
   loginUser: async (req, res, next) => {
     try {
       const { email, password } = req.body;
-      console.log(
-        "🚀 ~ file: auth.controller.js:38 ~ loginUser: ~ req.body:",
-        req.body
-      );
 
       const user = await usersServices.getUserByEmail(email);
-      console.log("user find in the db", user);
       if (!user) {
         return next(ERR_LOGIN_NOT_FOUND);
       }

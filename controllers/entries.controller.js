@@ -17,20 +17,16 @@ module.exports = {
       );
       res.send(entries);
     } catch (error) {
-      console.log(error);
       next(ERR);
     }
   },
 
   addEntry: async (req, res, next) => {
     try {
-      console.log("add entry contr", req.body);
-
       const newId = await entriesService.addEntry(req.body);
 
       res.send({ id: newId });
     } catch (error) {
-      console.log(error);
       next(ERR);
     }
   },
@@ -47,11 +43,10 @@ module.exports = {
   getEntryById: async (req, res, next) => {
     try {
       const { entryId } = req.params;
-      console.log(entryId);
       const entry = await entriesService.getEntryById(entryId);
       res.send(entry);
     } catch (error) {
-      console.log(error), next(ERR);
+      next(ERR);
     }
   },
   updateEntry: async (req, res, next) => {
@@ -63,7 +58,6 @@ module.exports = {
       await entriesService.updateEntry(entryId, req.body);
       res.send("updated");
     } catch (error) {
-      console.log(error);
       next(ERR);
     }
   },
