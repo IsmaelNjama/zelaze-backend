@@ -1,9 +1,11 @@
 require("dotenv").config();
 require("./utils/postgres.js").run();
-
+const jwt = require("./utils/jwt.js");
+const usersService = require("./services/users.services.js");
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const { LOGIN_NOT_AUTH } = require("./utils/errors.js");
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
@@ -16,7 +18,35 @@ app.use(
 
 //middleware
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
+  const publicRoutes = [
+    { method: "POST", url: "/auth/register" },
+    { method: "POST", url: "/auth/login" },
+  ];
+
+  const isPublicRoutes = publicRoutes.find(
+    (endpoint) => req.method === endpoint.method && req.url === endpoint.url
+  );
+
+  if (isPublicRoutes) {
+    return next();
+  }
+
+  const { authorization: token } = req.headers;
+
+  if (!token) {
+    return next(LOGIN_NOT_AUTH);
+  }
+
+  try {
+    const payload = jwt.verify(token);
+
+    const user = await usersService.getUserById(payload.userId);
+    req.user = user;
+  } catch (error) {
+    next(LOGIN_NOT_AUTH);
+  }
+
   console.log("middleware working okay");
 
   next();
