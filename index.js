@@ -1,49 +1,53 @@
-require("dotenv").config();
-require("./utils/postgres.js").run();
+require('dotenv').config();
+require('./utils/postgres.js').run();
 
-const express = require("express");
+const express = require('express');
 const app = express();
-const cors = require("cors");
+const cors = require('cors');
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Credentials', true);
+	req.header('Access-Control-Allow-Origin', '*');
+	next();
+});
 app.use(
-  cors({
-    origin: "*",
-  })
+	cors({
+		origin: '*',
+	})
 );
 
 //middleware
 
 app.use((req, res, next) => {
-  console.log("middleware working okay");
+	console.log('middleware working okay');
 
-  next();
+	next();
 });
 
 //routes
 
-app.use("/users", require("./routes/users.routes.js"));
-app.use("/auth", require("./routes/auth.routes.js"));
-app.use("/entries", require("./routes/entries.routes.js"));
+app.use('/users', require('./routes/users.routes.js'));
+app.use('/auth', require('./routes/auth.routes.js'));
+app.use('/entries', require('./routes/entries.routes.js'));
 
 app.use((err, req, res, next) => {
-  try {
-    const [statusCode, msg] = err;
+	try {
+		const [statusCode, msg] = err;
 
-    res.status(statusCode).send({
-      error: true,
-      message: msg,
-    });
-  } catch (error) {
-    res.status(500).send({
-      error: true,
-      message: err.message,
-    });
-  }
+		res.status(statusCode).send({
+			error: true,
+			message: msg,
+		});
+	} catch (error) {
+		res.status(500).send({
+			error: true,
+			message: err.message,
+		});
+	}
 });
 
 app.listen(2555, function () {
-  console.log(`listening on localhost ${PORT}`);
+	console.log(`listening on localhost ${PORT}`);
 });
