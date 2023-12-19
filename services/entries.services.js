@@ -10,14 +10,15 @@ const services = {
 		country,
 		region,
 		isurgent,
+		userid,
 	}) => {
 		try {
 			const resp = await query(
 				`
                 INSERT INTO entries
-                (title, isgivinghelp, category, availability, description, country, region, isurgent)
+                (title, isgivinghelp, category, availability, description, country, region, isurgent,userid)
                 VALUES
-                ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                ($1, $2, $3, $4, $5, $6, $7, $8,$9)
                 RETURNING id;
             `,
 				[
@@ -29,6 +30,7 @@ const services = {
 					country,
 					region,
 					isurgent,
+					userid,
 				]
 			);
 
