@@ -26,7 +26,8 @@ app.use(async (req, res, next) => {
   const publicRoutes = [
     { method: "POST", url: "/auth/register" },
     { method: "POST", url: "/auth/login" },
-    { method: "GET", url: "/entries/search" },
+    { method: "GET", url: "/entries" },
+    { method: "GET", url: "/users/:userId" },
   ];
 
   const isPublicRoutes = publicRoutes.find(
@@ -38,6 +39,12 @@ app.use(async (req, res, next) => {
     return next();
   }
 
+  const userIdRoutePattern = /^\/users\/\w+$/;
+
+  if (req.method === "GET" && userIdRoutePattern.test(req.url)) {
+    return next();
+  }
+
   const token = req.headers.authorization;
   if (!token) {
     return next(LOGIN_NOT_AUTH);
@@ -45,6 +52,7 @@ app.use(async (req, res, next) => {
 
   try {
     const payload = jwt.verify(JSON.parse(token));
+    // const payload = jwt.verify(token);
     const user = await usersService.getUserById(payload.userId);
     req.user = user;
   } catch (error) {
